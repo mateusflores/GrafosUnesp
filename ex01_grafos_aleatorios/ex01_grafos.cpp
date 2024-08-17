@@ -3,10 +3,6 @@
 #include <vector>
 #include <random>
 
-typedef struct node_t{
-    int counter;
-} node;
-
 int get_random_num(){
     std::random_device rd;
     std::mt19937 gen(rd());
