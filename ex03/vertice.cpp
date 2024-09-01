@@ -103,17 +103,30 @@ void imprime(vector<int>& visitd){
 }
 
 vector<int> busca_em_largura(grafo& G, int raiz, vector<int>& visitd){
+    // fila para controlar a busca do algoritmo
     queue<vertice> fila;
-
+    // vetor output para demonstrar a ordem da busca em largura
     vector<int> output_visitados;
-
+    // inicializamos a lista de visitados toda como false
+    // visto que ainda não visitamos nenhum vertice
     for (int i = 0; i < G.N; i++){
         visitd[i] = false;
     }
 
+    // marcamos o nó de início como true, ou seja, já visitado
     visitd[raiz] = true;
+    // adicionamos à fila para começar a busca pelo nó de origem
     fila.push(G[raiz]);
 
+    /*  
+        Passo a passo do algoritmo:
+
+        1. O laço remove um item da fila
+        2. Adicionamos o item no vetor da ordem de busca
+        3. Vamos iterar sobre todos os vizinhos do item
+        4. Caso não tenha sido visitado adicionamos na fila para
+        que possamos efetuar busca sobre ele
+    */
     while(!fila.empty()){
         vertice v_buff = fila.front();
         fila.pop();
