@@ -128,9 +128,8 @@ Edge* Graph::getEdge(int sourceId, int destinationId) const {
     return nullptr;  // Return nullptr if no such edge is found
 }
 
-void Graph::printAdjMatrix(){
-    // cria quadrada matriz 2d preenchida com zeros
-    std::vector<std::vector<int>> adjMatrix(nodes.size(), std::vector<int>(nodes.size(), 0));
+void Graph::generateAdjMatrix(){
+    adjMatrix = std::vector<std::vector<int>>(nodes.size(), std::vector<int>(nodes.size(), 0));
     Edge *temp = nullptr;
 
     for (int i = 0; i < nodes.size(); i++){
@@ -139,13 +138,64 @@ void Graph::printAdjMatrix(){
             adjMatrix[i][j] = temp == nullptr ? 0 : temp->getWeight();
             adjMatrix[j][i] = adjMatrix[i][j];
         }
-    }
+    }    
+}
 
+std::vector<std::vector<int>> Graph::getAdjMatrix() const {
+    return adjMatrix;
+}
+
+void Graph::printAdjMatrix(){
     for (int i = 0; i < nodes.size(); i++){
         for (int j = 0; j < nodes.size(); j++){
             std::cout << adjMatrix[i][j] << " ";
         }
         std::cout << std::endl;
     }
-
 }
+
+void Graph::initializeDistMatrix(){
+    distMatrix = std::vector<std::vector<int>>(nodes.size(), std::vector<int>(nodes.size(), 0));
+    for (int i = 0; i < nodes.size(); i++){
+        for (int j = 0; j < nodes.size(); j++){
+            distMatrix[i][j] = adjMatrix[i][j];
+        }
+    }
+    for (int i = 0; i < nodes.size(); i++){
+        for (int j = 0; j < nodes.size(); j++){
+            if(distMatrix[i][j] == 0){
+                distMatrix[i][j] = 999999;
+            }
+            if (i == j){
+                distMatrix[i][j] = 0;
+            }                
+        }
+    }
+}
+
+void Graph::floydWarshall(){
+    for(int k = 0; k < nodes.size(); k++){
+        for(int i = 0; i < nodes.size(); i++){
+            for(int j = 0; j < nodes.size(); j++){
+                if (distMatrix[i][j] > distMatrix[i][k] + distMatrix[k][j]){
+                    distMatrix[i][j] = distMatrix[i][k] + distMatrix[k][j];
+                }
+            }
+        }
+    }
+}
+
+void Graph::printDistMatrix(){
+    for (int i = 0; i < nodes.size(); i++){
+        for (int j = 0; j < nodes.size(); j++){
+            if(distMatrix[i][j] == 999999){
+                std::cout << "INF." << "\t";
+            }
+            else{
+                std::cout << distMatrix[i][j] << "\t";
+            }            
+        }
+        std::cout << std::endl;
+    }
+}
+
