@@ -44,6 +44,8 @@ public:
     void initializeDistMatrix();
     void floydWarshall();
     void printDistMatrix();
+    int findLongestPath();
+    double calculateMean();
 };
 
 #endif  // GRAPH_H

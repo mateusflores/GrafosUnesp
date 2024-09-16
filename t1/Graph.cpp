@@ -199,3 +199,27 @@ void Graph::printDistMatrix(){
     }
 }
 
+int Graph::findLongestPath(){
+    int longest = 0;
+    for(int i = 0; i < nodes.size(); i++){
+        for (int j = 0; j < nodes.size(); j++){
+            if (distMatrix[i][j] > longest && distMatrix[i][j] != 999999){
+                longest = distMatrix[i][j];
+            }
+        }
+    }
+    return longest;
+}
+
+double Graph::calculateMean(){
+    int numberOfEdges = edges.size();
+    int weightsSum = 0;
+    for(int i = 0; i < nodes.size(); i++){
+        for (int j = i + 1; j < nodes.size(); j++){
+            if (distMatrix[i][j] != 999999){
+                weightsSum += distMatrix[i][j];
+            }
+        }
+    }
+    return weightsSum / static_cast<double>(numberOfEdges);
+}
