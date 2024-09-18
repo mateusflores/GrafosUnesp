@@ -78,20 +78,24 @@ Node* Graph::getNode(int id) const {
 
 // Edge management
 Edge* Graph::addEdge(int sourceId, int destinationId, int weight) {
+    // Os dois nós devem existir para podermos prosseguir
     if (!nodeExists(sourceId) || !nodeExists(destinationId)) {
-        return nullptr;  // Source or destination node does not exist
+        return nullptr;
     }
+    // Não deve adicionar a aresta caso já exista
     if (edgeExists(sourceId, destinationId)) {
-        return nullptr;  // Edge already exists
+        return nullptr;
     }
 
+    // Pega os nós da lista de nós
     Node* source = nodes[sourceId];
     Node* destination = nodes[destinationId];
 
+    // Cria a aresta e adiciona à lista de arestas
     Edge* edge = new Edge(source, destination, weight);
     edges.push_back(edge);
 
-    // Add the edge to the connected nodes
+    // Adiciona a aresta aos nós relacionados para contabilizar a vizinhança
     source->addEdge(edge);
     destination->addEdge(edge);
 
