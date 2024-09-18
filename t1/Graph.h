@@ -33,6 +33,7 @@ public:
     Edge* getEdge(int sourceId, int destinationId) const;
 
     // relacionadas a matriz de adjacencias
+    void initializeAdjMatrix(int qtNodes);
     void generateAdjMatrix();
     std::vector<std::vector<int>> getAdjMatrix() const;
 
@@ -44,8 +45,14 @@ public:
     void initializeDistMatrix();
     void floydWarshall();
     void printDistMatrix();
+
     int findLongestPath();
     double calculateMean();
+
+    void erdosRenyi(double prob, int qtNodes);
+    void barabasiAlbert(int qtNodes);
+
+    int graphDegreeSum();
 };
 
 #endif  // GRAPH_H

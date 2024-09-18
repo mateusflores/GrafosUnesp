@@ -3,19 +3,21 @@
 
 #include <string>
 #include <vector>
+#include <set>
+#include "Edge.h"
 
 class Edge;
 
 class Node {
 private:
     int id;
-    std::vector<Edge*> edges;
+    std::set<Edge> edges;
 
 public:
     Node(int id);
     
     int getId() const;
-    std::vector<Edge*> getEdges() const;
+    std::set<Edge> getEdges() const;
 
     void addEdge(Edge* edge);
     void removeEdge(Edge* edge);

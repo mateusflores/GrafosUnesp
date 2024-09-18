@@ -19,3 +19,16 @@ int Edge::getWeight() const {
 void Edge::setWeight(int newWeight) {
     weight = newWeight;
 }
+
+bool Edge::operator==(const Edge& other) const {
+    return (source->getId() == other.getSource()->getId() && destination->getId() == other.getDestination()->getId()) || 
+    (source->getId() == other.getDestination()->getId() && destination->getId() == other.getSource()->getId());
+}
+
+bool Edge::operator<(const Edge& other) const {
+    if (source->getId() != other.getSource()->getId()) {
+        return source->getId() < other.getSource()->getId();
+    }
+
+    return destination->getId() < other.getDestination()->getId();
+}

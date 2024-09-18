@@ -1,5 +1,14 @@
 #include "Graph.h"
 #include <algorithm>
+#include <random>
+
+double getRandomProb(){
+    std::random_device rd;
+    std::mt19937 gen(rd());
+    std::uniform_real_distribution<> distr(0.0, 1.0);
+
+    return distr(gen);
+}
 
 Graph::Graph() {}
 
@@ -49,9 +58,11 @@ void Graph::removeNode(int id) {
     Node* node = nodes[id];
 
     // Remove all edges connected to this node
+    /*
     for (Edge* edge : node->getEdges()) {
         removeEdge(edge->getSource()->getId(), edge->getDestination()->getId());
     }
+    */
 
     // Remove the node from the graph
     delete node;
@@ -128,8 +139,11 @@ Edge* Graph::getEdge(int sourceId, int destinationId) const {
     return nullptr;  // Return nullptr if no such edge is found
 }
 
-void Graph::generateAdjMatrix(){
-    adjMatrix = std::vector<std::vector<int>>(nodes.size(), std::vector<int>(nodes.size(), 0));
+void Graph::initializeAdjMatrix(int qtNodes){
+    adjMatrix = std::vector<std::vector<int>>(qtNodes, std::vector<int>(qtNodes, 0));
+}
+
+void Graph::generateAdjMatrix(){    
     Edge *temp = nullptr;
 
     for (int i = 0; i < nodes.size(); i++){
@@ -222,4 +236,86 @@ double Graph::calculateMean(){
         }
     }
     return weightsSum / static_cast<double>(numberOfEdges);
+}
+
+void Graph::erdosRenyi(double prob, int qtNodes){
+    Node* ni;
+    Node* nj;
+    Edge* tempEdge;
+    for (int i = 0; i < qtNodes; i++){
+        for (int j = i + 1; j < qtNodes; j++){
+            if (getRandomProb() < prob){
+                ni = getNode(i);
+                nj = getNode(j);
+
+                tempEdge = addEdge(i, j, 1);
+
+                ni->addEdge(tempEdge);
+                nj->addEdge(tempEdge);
+
+                adjMatrix[i][j] = 1;
+                adjMatrix[j][i] = 1;
+            }
+        }
+    }
+}
+
+int Graph::graphDegreeSum(){
+    int result = 0;
+    for(auto map : nodes){
+        result += map.second->getEdges().size();
+    }
+    return result;
+}
+
+/*
+1. Inicializar um grafo de ER com 20 nós
+2. Adiciona um nó por vez:
+    - A cada vez que a gente for adicionar um nó, calcular um valor aleatório de probabilidade (pa).
+    - E calcular pv.
+    pv = (grau do nó v) / (soma dos graus de todos os nós do grafo)
+    
+    if (pa < pv) -> adicionar uma aresta ao nó v
+    
+    for (u : remainingNodes) remainingNodes -> 90 - 20 = 70
+        createNode(u)
+        for (v : graph)
+            calcula prob aleatoria pa
+            calcula pv
+            if (pv < pa)
+                aresta(u, v)
+*/
+void Graph::barabasiAlbert(int qtNodes){
+    // ER -> 0 ... 19 (20 nodes)
+    double prob;
+    Edge* tempEdge;
+    Node* temp1;
+    Node* temp2;
+    for(int i = 20; i < qtNodes; i++){
+        Node *newNode = addNode(i);
+        for(auto existingNode : nodes){
+            prob = existingNode.second->getEdges().size() / static_cast<double>(graphDegreeSum());
+            /*
+            if (prob * 10.0 < 1.0){
+                prob = prob * 10;
+            }
+            */
+            std::cout << prob << std::endl;
+            if(getRandomProb() < prob){
+                // aresta(u, v)
+                tempEdge = addEdge(i, existingNode.second->getId(), 1);
+
+                temp1 = getNode(i);             // temp1 = u
+                temp2 = existingNode.second;    // temp2 = v
+                                                // mantem registro da vizinhanca
+                temp1->addEdge(tempEdge);       // u.adicionaAresta(u, v)
+                temp2->addEdge(tempEdge);       // v.adicionaAresta(u, v)
+
+                adjMatrix[i][existingNode.second->getId()] = 1;
+                adjMatrix[existingNode.second->getId()][i] = 1;
+                
+                std::cout << i << " - " << existingNode.second->getId() << std::endl;
+            }
+        }
+    }
 }
