@@ -1,29 +1,29 @@
 #include "Node.h"
 
-// Constructor
 Node::Node(int id) : id(id) {}
 
-// Get ID
 int Node::getId() const {
     return id;
 }
 
-// Get edges (returns the set of edges)
 std::set<Edge> Node::getEdges() const {
     return edges;
 }
 
-// Add edge by dereferencing Edge pointer
 void Node::addEdge(Edge* edge) {
-    edges.insert(*edge);  // Dereference edge pointer and insert Edge object into the set
+    // Note que a inserção é feita dereferenciando o pointer, visto que para
+    // que o std::set consiga fazer comparações, deve fazer com a classe em si
+    // e não sobre os pointers. Caso contrário, ele compararia valores de endereço.
+    edges.insert(*edge);
 }
 
-// Remove edge by dereferencing Edge pointer
 void Node::removeEdge(Edge* edge) {
-    edges.erase(*edge);  // Dereference and remove Edge object from the set
+    // Note que a remoção é feita dereferenciando o pointer, visto que para
+    // que o std::set consiga fazer comparações, deve fazer com a classe em si
+    // e não sobre os pointers. Caso contrário, ele compararia valores de endereço.
+    edges.erase(*edge);
 }
 
-// Check if the edge exists in the set by dereferencing
 bool Node::hasEdge(const Edge* edge) const {
-    return edges.find(*edge) != edges.end();  // Dereference and find the Edge in the set
+    return edges.find(*edge) != edges.end();
 }

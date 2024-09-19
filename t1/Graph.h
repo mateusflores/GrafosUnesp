@@ -10,16 +10,17 @@
 
 class Graph {
 private:
-    std::unordered_map<int, Node*> nodes;  // Store nodes by their IDs
-    std::vector<Edge*> edges;              // Store all edges in the graph
-    std::vector<std::vector<int>> adjMatrix;
-    std::vector<std::vector<int>> distMatrix;
+    std::unordered_map<int, Node*> nodes;       // Mapeia ids a objetos Node
+    std::vector<Edge*> edges;                   // Armazena todas as arestas
+    std::vector<std::vector<int>> adjMatrix;    // Matriz de adjacencias
+    std::vector<std::vector<int>> distMatrix;   // Matriz de distancias
 
 public:
     // Utilize este construtor para inicializar um grafo vazio
     Graph();
     // Este construtor pode ser utilizado para gerar um grafo através de um arquivo dado.
     Graph(std::ifstream &f);
+    // Destrutor
     ~Graph();
 
     // Adiciona um nó ao grafo
@@ -77,10 +78,30 @@ public:
     // Calcula a média de todas as distâncias da matriz de distâncias
     double calculateMean();
 
-    // 
+    /*
+    Pega todos os nodes registrados no grafo, itera entre todos eles (i x j)
+    verificando se deve ser construída uma aresta entre os nós [i][j]. 
+    
+    A probabilidade de haver uma aresta entre dois nós é dada
+    pela variável prob, que será comparada com um gerador de doubles
+    aleatórios com range entre 0.0 e 1.0.
+    */
     void erdosRenyi(double prob, int qtNodes);
+
+    /*
+    int qtNodes : quantidade de nós total ao final da operação
+
+    1. Inicializa um grafo de ER com 20 nós.
+    2. Iterar por qtNodes - 20, onde:
+        - A cada iteração adicionamos um novo nó ao grafo
+        2.1 Iteramos sobre todos os nó existentes no grafo. E a cada iteração:
+            - Geramos um valor de probabilidade ALEATÓRIO (PA)
+            - Calculamos o PV = grau do nó / somatória de todos os graus
+            - Se PA < PV criamos uma aresta entre o novo nó, e o nó da iteração (com peso 1)
+    */
     void barabasiAlbert(int qtNodes);
 
+    // Faz uma somatória de todos os graus de cada nó
     int graphDegreeSum();
 };
 

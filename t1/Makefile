@@ -1,42 +1,42 @@
-# Compiler to use
+# Compilador a ser utilizado
 CXX = g++
 
-# Compiler flags
-# -Wall enables all warnings
-# -std=c++11 ensures we use the C++11 standard
+# Flags que vamos passar para o compilador
+# -Wall -> habilita warning
+# -std=c++11 garante a utilizacao do standard C++11
 CXXFLAGS = -Wall -std=c++11
 
-# The name of the executable to be created
+# Nome do executavel a ser criado
 TARGET = main
 
 # Source files
-# List all .cpp files that need to be compiled
+# Lista de todos os arquivos .cpp que precisam ser compilados
 SRCS = main.cpp Graph.cpp Node.cpp Edge.cpp
 
 # Object files
-# These are the .o files created after compilation
+# Arquivos .o a serem criados pela compilação
 OBJS = $(SRCS:.cpp=.o)
 
-# Default target that gets called when running 'make'
-# It will compile the program and link the object files into an executable
+# O target que será chamado ao invocarmos 'make'
+# Compila o programa e linka os objetos criando o executavel
 all: $(TARGET)
 
-# Rule to build the final executable
-# $@ refers to the target (in this case, the final executable $(TARGET))
-# $^ refers to all the dependencies (in this case, the object files $(OBJS))
+# Regra para criacao do executavel final
+# $@ refere-se ao target (o executavel final -> $(TARGET))
+# $^ refere-se as dependencias (os object files $(OBJS))
 $(TARGET): $(OBJS)
 	$(CXX) $(CXXFLAGS) -o $@ $^
 
-# Rule to compile the .cpp files into .o object files
-# $< refers to the first dependency (in this case, a .cpp file)
-# The -c flag compiles without linking
+# Regra para compilar os arquivos .cpp em .o
+# $< o arquivo .cpp
+# a flag -c apenas compila sem linkar
 %.o: %.cpp
 	$(CXX) $(CXXFLAGS) -c $< -o $@
 
-# Rule to clean up all generated files
-# It removes the object files and the final executable
+# Regra para remoção usando make clean
+# Remove os object files e o executavel final
 clean:
 	rm -f $(OBJS) $(TARGET)
 
-# Phony targets are not actual files; this avoids issues if files with these names exist
+# Ignora arquivos de nome "all" e "clean"
 .PHONY: all clean

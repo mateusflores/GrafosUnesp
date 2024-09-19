@@ -9,8 +9,8 @@ int main(int argc, char *argv[]) {
     double prob;
     int qtNodes = 0;    
 
-    prob = std::stod(argv[1]);
-    qtNodes = std::stoi(argv[2]);
+    prob = std::stod(argv[1]);      // converte de str para double
+    qtNodes = std::stoi(argv[2]);   // converte de str para int
     graphType = argv[3];
 
     std::cout << "Probabilidade: " << prob << std::endl;
@@ -59,6 +59,7 @@ int main(int argc, char *argv[]) {
     std::cout << "Mean: " << g->calculateMean() << std::endl;
     std::cout << "Longest Path: " << g->findLongestPath() << std::endl;
 
+    // Joga os resultados para o um arquivo chamado output.txt
     std::ofstream outfile("output.txt");
     outfile << g->calculateMean() << " " << g->findLongestPath() << std::endl;
     outfile.close();

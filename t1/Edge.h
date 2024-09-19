@@ -12,7 +12,7 @@
 #include "Node.h"
 
 // Forward declaration - deste modo a classe Edge é capaz
-// de faze referência à classe Node
+// de fazer referência à classe Node
 class Node;
 
 class Edge {

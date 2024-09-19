@@ -57,14 +57,11 @@ void Graph::removeNode(int id) {
 
     Node* node = nodes[id];
 
-    // Remove all edges connected to this node
-    /*
     for (Edge* edge : node->getEdges()) {
         removeEdge(edge->getSource()->getId(), edge->getDestination()->getId());
     }
-    */
 
-    // Remove the node from the graph
+    // Remove o nó do grafo e destrói o objeto
     delete node;
     nodes.erase(id);
 }
@@ -76,7 +73,6 @@ Node* Graph::getNode(int id) const {
     return nullptr;
 }
 
-// Edge management
 Edge* Graph::addEdge(int sourceId, int destinationId, int weight) {
     // Os dois nós devem existir para podermos prosseguir
     if (!nodeExists(sourceId) || !nodeExists(destinationId)) {
@@ -107,7 +103,7 @@ void Graph::removeEdge(int sourceId, int destinationId) {
         return;
     }
 
-    // Find the edge and remove it
+    // encontra a aresta e a remove
     edges.erase(std::remove_if(edges.begin(), edges.end(),
         [sourceId, destinationId](Edge* edge) {
             return edge->getSource()->getId() == sourceId &&
@@ -140,7 +136,7 @@ Edge* Graph::getEdge(int sourceId, int destinationId) const {
             return edge;
         }
     }
-    return nullptr;  // Return nullptr if no such edge is found
+    return nullptr;  // Retorna nullptr se nao encontrou nada
 }
 
 void Graph::initializeAdjMatrix(int qtNodes){
@@ -249,14 +245,18 @@ void Graph::erdosRenyi(double prob, int qtNodes){
     for (int i = 0; i < qtNodes; i++){
         for (int j = i + 1; j < qtNodes; j++){
             if (getRandomProb() < prob){
+                // Pega o endereço dos nodes
                 ni = getNode(i);
                 nj = getNode(j);
 
+                // Adiciona uma aresta entre os nodes
                 tempEdge = addEdge(i, j, 1);
 
+                // Registra as arestas no set de cada node
                 ni->addEdge(tempEdge);
                 nj->addEdge(tempEdge);
 
+                // Atualiza a matriz de adjacencias
                 adjMatrix[i][j] = 1;
                 adjMatrix[j][i] = 1;
             }
@@ -291,22 +291,26 @@ int Graph::graphDegreeSum(){
 */
 void Graph::barabasiAlbert(int qtNodes){
     // ER -> 0 ... 19 (20 nodes)
-    double prob;
+    double prob;        // probabilidade (grau do nó / somatória dos graus de todos os nós)
+
+    // pointers placeholders
     Edge* tempEdge;
     Node* temp1;
     Node* temp2;
-    for(int i = 20; i < qtNodes; i++){
-        Node *newNode = addNode(i);
+    for(int i = 20; i < qtNodes; i++){        
+        Node *newNode = addNode(i);     // novo nó sendo adicionado nesta iteração
         for(auto existingNode : nodes){
+            // calcula PV (grau do nó / somatória dos graus de todos os nós)
             prob = existingNode.second->getEdges().size() / static_cast<double>(graphDegreeSum());
             /*
+            // Descomentar para aumentar a probabilidade, aumentando a quantidade de arestas
             if (prob * 10.0 < 1.0){
                 prob = prob * 10;
             }
             */
             std::cout << prob << std::endl;
             if(getRandomProb() < prob){
-                // aresta(u, v)
+                // adiciona a aresta(u, v) ao grafo
                 tempEdge = addEdge(i, existingNode.second->getId(), 1);
 
                 temp1 = getNode(i);             // temp1 = u
@@ -315,6 +319,7 @@ void Graph::barabasiAlbert(int qtNodes){
                 temp1->addEdge(tempEdge);       // u.adicionaAresta(u, v)
                 temp2->addEdge(tempEdge);       // v.adicionaAresta(u, v)
 
+                // atualiza a matriz de adjacencias
                 adjMatrix[i][existingNode.second->getId()] = 1;
                 adjMatrix[existingNode.second->getId()][i] = 1;
                 
