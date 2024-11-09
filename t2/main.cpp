@@ -1,12 +1,13 @@
 #include "Graph.h"
 
+
+
 int main(int argc, char *argv[]) {
     double prob;
     int qtNodes = 0; 
 
     prob = std::stod(argv[1]); 
     qtNodes = std::stoi(argv[2]);
-    cout << argc << endl;
 
     Graph *g = new Graph();
 
