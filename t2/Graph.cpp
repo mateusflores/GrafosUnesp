@@ -117,6 +117,7 @@ int Graph::findLowerBoundChromaticNumber(int qtAttempts){
     return largestCliqueSize;
 }
 
+// Método para a inicialização do grafo de Watts Strogatz
 void Graph::wattsStrogatz(int neighbors, double prob) {
     K = neighbors;
 
@@ -125,10 +126,14 @@ void Graph::wattsStrogatz(int neighbors, double prob) {
     rewireEdges(prob);
 }
 
+// Algoritmo para gerar um grafo regular
 void Graph::generateRegularGraph() {
     for (int i = 0; i < qtNodes; i++) {
+        // Conecta cada nó i a K / 2 vizinhos à direita, respeitando a conexão circular
         for (int j = 1; j <= K / 2; j++) {
+            // Calcula o índice do vizinho à direita com conexão circular
             int neighbor = (i + j) % qtNodes;
+            // Faz a adição do nó não direcionado
             adj[i].insert(neighbor);
             adj[neighbor].insert(i);
         }
@@ -142,24 +147,28 @@ void Graph::rewireEdges(double p) {
     uniform_int_distribution<> nodeDist(0, qtNodes - 1);
 
     for (int i = 0; i < qtNodes; i++) {
+        // Vetor para armazenar os vizinhos à direita de i para possível reconexão
         vector<int> rightNeighbors;
         for (int j = 1; j <= K / 2; j++) {
+            // Calcula o índice do vizinho à direita e adiciona no vetor de vizinhos à direita
             int neighbor = (i + j) % qtNodes;
             rightNeighbors.push_back(neighbor);
         }
 
         for (int neighbor : rightNeighbors) {
-            double bla = probDist(gen);
-            cout << "bla: " << bla << endl;
-            if (bla < p) {
+            // Com base em p faz, ou não, a reconexão da aresta
+            if (probDist(gen) < p) {
                 int newNeighbor;
                 do {
+                    // Seleciona um vizinho aleatório
                     newNeighbor = nodeDist(gen);
-                    cout << "bla2: " << newNeighbor << endl;
                 } while (newNeighbor == i || adj[i].count(newNeighbor));
 
+                // Remove a conexão atual
                 adj[i].erase(neighbor);
                 adj[neighbor].erase(i);
+
+                // Adiciona a nova conexão
                 adj[i].insert(newNeighbor);
                 adj[newNeighbor].insert(i);
             }
