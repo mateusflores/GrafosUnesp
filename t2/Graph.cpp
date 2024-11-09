@@ -56,10 +56,24 @@ void Graph::erdosRenyi(double prob, int qtNodes){
     }
 }
 
-bool Graph::isNeighborOfEveryItem(int u) {
-    if (adj[u].size() == qtNodes - 1)
-        return true;
-    return false;
+/*
+bool Graph::isNeighborOfEveryItem(const std::vector<int>& L, int u) {
+    for (int v : L) {
+        if (adjMatrix[u][v] == 0) {
+            return false;
+        }
+    }
+    return true;
+}
+*/
+
+bool Graph::isNeighborOfEveryItem(const std::vector<int>& L, int u) {
+    for (int v : L) {
+        if (adj[u].find(v) == adj[u].end()) {
+            return false;
+        }
+    }
+    return true;
 }
 
 // Algoritmo CliqueMaximal
@@ -78,7 +92,7 @@ vector<int> Graph::findMaxClique(int v) {
         // Itera sobre todos os vértices do grafo
         for (int u = 0; u < qtNodes; u++) {
             // Se u ainda ñ está em maxClique e é vizinho de todos os itens de maxClique
-            if (find(maxClique.begin(), maxClique.end(), u) == maxClique.end() && isNeighborOfEveryItem(u)) {
+            if (find(maxClique.begin(), maxClique.end(), u) == maxClique.end() && isNeighborOfEveryItem(maxClique, u)) {
                 // Adiciona 'u' à lista de vértices da clique
                 maxClique.push_back(u); 
                 c++; // Incrementa o contador
@@ -122,7 +136,9 @@ void Graph::wattsStrogatz(int neighbors, double prob) {
     K = neighbors;
 
     generateRegularGraph();
+    cout << "Grafo Regular: " << endl;
     displayAdjList();
+    cout << endl;
     rewireEdges(prob);
 }
 

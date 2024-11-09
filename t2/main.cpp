@@ -14,8 +14,7 @@ void printArgs(double prob, int qtNodes, string graphType, int qtNeighbors){
 /* COMO INVOCAR MAIN 
 *   ./main prob qtNodes graphType
 *   ./main 0.5 50 er
-*
-*   ./main prob qtNodes graphType qtNeihbors
+*   ./main prob qtNodes graphType qtNeighbors
 *   ./main 0.5 50 ws 7
 */
 

@@ -28,7 +28,7 @@ public:
 
     void displayAdjList();
 
-    bool isNeighborOfEveryItem(int u);
+    bool isNeighborOfEveryItem(const std::vector<int>& L, int u);
 
     vector<int> findMaxClique(int v);
     
