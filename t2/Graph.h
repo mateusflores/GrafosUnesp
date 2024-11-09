@@ -10,10 +10,11 @@ using namespace std;
 
 class Graph {
 private:
-    
+    int qtNodes;
     vector<vector<int>> adj;
 
 public:
+    Graph(int qtNodes);
 
     void addNode();
     
@@ -25,6 +26,15 @@ public:
 
     void displayAdjList();
 
+    bool isNeighborOfEveryItem(int u);
+
+    vector<int> findMaxClique(int v);
+    
+    int getMaxDegree();
+
+    int findUpperBoundChromaticNumber();
+
+    int findLowerBoundChromaticNumber(int qtAttempts);
 };
 
 #endif  // GRAPH_H
