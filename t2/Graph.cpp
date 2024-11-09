@@ -21,12 +21,12 @@ int generateRandomInt(int upperBound) {
 Graph::Graph(int qtNodes) : qtNodes(qtNodes) {};
 
 void Graph::addNode() {
-    adj.push_back(vector<int>());
+    adj.push_back(set<int>());
 }
 
 void Graph::addEdge(int i, int j) {
-    adj[i].push_back(j);
-    adj[j].push_back(i);
+    adj[i].insert(j);
+    adj[j].insert(i);
 }
 
 void Graph::displayAdjList() {
@@ -115,4 +115,54 @@ int Graph::findLowerBoundChromaticNumber(int qtAttempts){
     }
 
     return largestCliqueSize;
+}
+
+void Graph::wattsStrogatz(int neighbors, double prob) {
+    K = neighbors;
+
+    generateRegularGraph();
+    displayAdjList();
+    rewireEdges(prob);
+}
+
+void Graph::generateRegularGraph() {
+    for (int i = 0; i < qtNodes; i++) {
+        for (int j = 1; j <= K / 2; j++) {
+            int neighbor = (i + j) % qtNodes;
+            adj[i].insert(neighbor);
+            adj[neighbor].insert(i);
+        }
+    };  
+}
+
+void Graph::rewireEdges(double p) {
+    random_device rd;
+    mt19937 gen(rd());
+    uniform_real_distribution<> probDist(0.0, 1.0);
+    uniform_int_distribution<> nodeDist(0, qtNodes - 1);
+
+    for (int i = 0; i < qtNodes; i++) {
+        vector<int> rightNeighbors;
+        for (int j = 1; j <= K / 2; j++) {
+            int neighbor = (i + j) % qtNodes;
+            rightNeighbors.push_back(neighbor);
+        }
+
+        for (int neighbor : rightNeighbors) {
+            double bla = probDist(gen);
+            cout << "bla: " << bla << endl;
+            if (bla < p) {
+                int newNeighbor;
+                do {
+                    newNeighbor = nodeDist(gen);
+                    cout << "bla2: " << newNeighbor << endl;
+                } while (newNeighbor == i || adj[i].count(newNeighbor));
+
+                adj[i].erase(neighbor);
+                adj[neighbor].erase(i);
+                adj[i].insert(newNeighbor);
+                adj[newNeighbor].insert(i);
+            }
+        }
+    }
 }

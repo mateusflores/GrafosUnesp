@@ -45,7 +45,10 @@ int main(int argc, char *argv[]) {
     }
     // Watts-Strogatz
     else if (graphType == "ws"){
-
+        g->initializeAdjVector(qtNodes);
+        g->wattsStrogatz(qtNeighbors, prob);
+        cout << "Lista de adjacencias:" << endl;
+        g->displayAdjList();
     }
 
     /* GERAÇÃO DOS RESULTADOS

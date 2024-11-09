@@ -5,13 +5,15 @@
 #include <fstream>
 #include <string>
 #include <vector>
+#include <set>
 
 using namespace std;
 
 class Graph {
 private:
     int qtNodes;
-    vector<vector<int>> adj;
+    vector<set<int>> adj;
+    int K;
 
 public:
     Graph(int qtNodes);
@@ -35,6 +37,12 @@ public:
     int findUpperBoundChromaticNumber();
 
     int findLowerBoundChromaticNumber(int qtAttempts);
+
+    void wattsStrogatz(int neighbors, double prob);
+
+    void generateRegularGraph();
+
+    void rewireEdges(double p);
 };
 
 #endif  // GRAPH_H
