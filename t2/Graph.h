@@ -5,13 +5,17 @@
 #include <fstream>
 #include <string>
 #include <vector>
+#include <set>
 
 using namespace std;
 
 class Graph {
 private:
     
-    vector<vector<int>> adj;
+    vector<set<int>> adj;
+    int N; 
+    int K;
+    double p;
 
 public:
 
@@ -24,6 +28,12 @@ public:
     void initializeAdjVector(int qtNodes);
 
     void displayAdjList();
+
+    void wattsStrogatzGraph (int vertices, int neighbors, double prob);
+
+    void generateRegularGraph();
+
+    void rewireEdges();
 
 };
 
